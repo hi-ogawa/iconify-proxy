@@ -7,10 +7,6 @@ async function main() {
   const collectionsFile = `${baseDir}/collections.json`;
   const collections = JSON.parse(fs.readFileSync(collectionsFile, "utf-8"));
   for (const [k, v] of Object.entries(collections)) {
-    // skip color icon
-    if ((v as any).palette) {
-      continue;
-    }
     const jsonFile = `${baseDir}/json/${k}.json`;
     const ranges = getIconRanges(jsonFile);
     console.log(ranges.map(String).join("\n"))
@@ -39,7 +35,7 @@ async function main() {
 
 main();
 
-// node -r esbuild-register ./src/analyze.ts |& tee test.csv
+// node --max-old-space-size=4000 -r esbuild-register ./src/analyze.ts |& tee test.csv
 
 // jq 'to_entries | map([.key, .value.total, .value.palette, .value.height])' < node_modules/@iconify/json/collections.json
 
